@@ -1,0 +1,39 @@
+body{
+    background-color:grey
+}
+
+form{
+    border: black 5px;
+    background-color: white;
+    margin: 15% auto;
+    color: black;
+    font-family: 'Gothic A1', sans-serif;
+    font-weight:bold;
+    padding: 7px;
+    width: 30%;
+    vertical-align: middle;
+    
+}
+p{
+    font-size: 43px;
+    color: white;
+    /*text-border: 2px 2px black;*/
+    text-align :center;
+    font-style: italic;
+    text-shadow: 1px 1px black;
+
+}
+
+h1{
+    font-family: 'EB Garamond', serif;
+    color:white;
+    text-shadow: 5px 5px #000000;
+    font-size: 100px;
+    text-align:center;
+}
+
+#tp{
+    text-align:center;
+}
+
+

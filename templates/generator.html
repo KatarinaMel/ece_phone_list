@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>Phone List Generator</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel = "stylesheet" href="{{ url_for('static', filename='css/generatorcss.css') }}" />
+        <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
+    </head>
+    <body>
+      <h1>Electrical and Computer Engineering</h1>
+      <div class="container-fluid">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Title</th>
+              <th>Phone</th>
+              <th>Room</th>
+              <th>Building</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for person in result %}
+             <tr>
+                {% for value in person %}
+                  <td>{{ value }} </td>
+                {% endfor %}
+             </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </body>
+</html>
+

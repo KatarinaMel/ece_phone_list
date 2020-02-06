@@ -31,19 +31,6 @@ def is_good_response(resp):
 def log_error(e):
   print(e)
 
-# Return the time that it takes to make the recipe
-def get_time(url):
-  # Get response from url
-  response = simple_get(url)
-  if response is not None:
-    html = BeautifulSoup(response, 'html.parser')
-    for span in html.select("[class=ready-in-time]"):
-        words = span.string.split(' ')
-        time = int(words[0])
-        if words[1] == "h":
-          time = time * 60
-        return time
-
 # Map the header to an index
 def process_header(header):
   header_enum = defaultdict(str)
@@ -66,7 +53,7 @@ def parse_column(column):
 
 
 # Read the directory from JSOE
-def read_jsoe_dir():
+def read_jsoe_dir(create, check, prev, fileName):
   # Get response from jsoe directory url
   response = simple_get("https://www.jacobsschool.ucsd.edu/about/about_contacts/directory.sfe")
   if response is not None:
@@ -79,6 +66,7 @@ def read_jsoe_dir():
     # Go through all the rows
     row_idx = 0
     people_table= defaultdict(list)
+    people_list = list()
     for row in table.select('tr'):
       # Process the header
       if row_idx == 0:
@@ -98,15 +86,22 @@ def read_jsoe_dir():
           if header_map[col_idx] == "Department":
             if val == "Electrical and Computer Engineering":
               is_ece = True
+          if header_map[col_idx] == "Title":
+            if "Academic" in val or "Postdoc" in val or "Other" in val or "Scholar" in val:
+              title_on_list = False
+            else:
+              title_on_list = True
           person.append([val, True])
           col_idx += 1
 
         # Only add the ECE people
-        if is_ece:
+        if is_ece and title_on_list:
           people_table[name] = person
+          people_list.append(name)
 
       row_idx += 1
-    return [people_table, header_map]
+    print("done!")
+    return [people_table, people_list, header_map]
 
 # Double check the table with the blink directory
 def check_blink(table, header_map):
@@ -143,8 +138,58 @@ def check_blink(table, header_map):
               print("---------")
               i += 1
 
+def create_header_enum(header_map):
+  header_enum = defaultdict(int)
+  for i in header_map:
+    header_enum[header_map[i]] = i
 
-############### Main #######################
-[people_table, header_map] = read_jsoe_dir()
-print(people_table['Grayson, David J.'])
-check_blink(people_table, header_map)
+  return header_enum
+
+def title_symbol(title):
+  if "Res" in title:
+    return "R"
+  elif "Emer" in title:
+    return "PE"
+  elif "Prof" in title:
+    return "P"
+  else:
+    return "S"
+
+def shorten_phone(num):
+  if len(num) < 6:
+    return ''
+  short_num = num[-6:]
+  return short_num.replace('-', '')
+
+def split_location(loc):
+  room_idx = re.search('\d', loc)
+  last_idx = len(loc)
+  room = ""
+  if room_idx is not None:
+    last_idx = room_idx.start()
+    room = loc[last_idx:]
+    if last_idx - 1 >= 0 and loc[last_idx - 1] is 'B':
+      last_idx = last_idx - 1
+      room = loc[last_idx - 1] + room
+    last_idx = last_idx - 1 # to get rid of the trailing space
+  building = loc[:last_idx]
+  return [room, building] 
+
+def format_table(table, names, header_map):
+# Re-map headers to nums
+  header_enum = create_header_enum(header_map)
+  
+# TODO figure out how to use error checking bools too
+  people_list = list()
+  for name in names:
+    if name in table:
+      person = list()
+      person.append(name)
+      person.append(table[name][header_enum['Email']][0])
+      person.append(title_symbol(table[name][header_enum['Title']][0]))
+      person.append(shorten_phone(table[name][header_enum['Phone']][0]))
+      [room, building] = split_location(table[name][header_enum['Location']][0])
+      person.append(room)
+      person.append(building)
+      people_list.append(person)
+  return people_list

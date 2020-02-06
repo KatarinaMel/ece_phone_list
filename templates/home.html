@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <title>Phone List Generator</title>
+        <link rel = "stylesheet" href="{{ url_for('static', filename='css/homecss.css') }}" />
+        <link href="https://fonts.googleapis.com/css?family=EB+Garamond|Gothic+A1&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <h1>ECE Phone List Generator</h1>
+        <p>How do you want to generate the phone list?</p>
+        <div id = "formBox">
+            <form  id="prefForm" action='/generator/' method="POST">
+                <input id="uploadPrev" name="uploadPrev" type="checkbox" onclick="var input = document.getElementById('fileName'); if(this.checked){ input.disabled = false; input.focus();}else{input.disabled=true;}" />Update pre-existing file
+                <input id="fileName" name="fileName" disabled="disabled"/>
+                <br>
+                <input id="blinkCheck" name="blinkCheck" type="checkbox"/>Do error checking
+                <br>
+                <input id="newList" name="newList" type="checkbox"/>Create new list
+                <br>
+                <!-- <input type = "submit" name = "form" onclick="location.href='generator'" value="Submit!"> -->
+                <input type = "submit" name = "form" value="Submit!">
+         </form>
+    </body>
+</html>
+
