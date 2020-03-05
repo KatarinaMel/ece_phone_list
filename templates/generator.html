@@ -12,10 +12,18 @@
     </head>
     <body>
       <h1>Electrical and Computer Engineering</h1>
-      <div class="container-fluid">
-        <table class="table table-striped">
+      <p id="date"></p>
+      <script>
+        y = n.getFullYear();
+        m = n.getMonth() + 1;
+        d = n.getDate();
+        document.getElementById("date").innerHTML = m + "/" + d + "/" + y;
+      </script>
+      <div class="container-fluid overflow-auto">
+      {% for table in result %}
+        <table class="table table-striped w-auto table-bordered table-responsive">
           <thead>
-            <tr>
+            <tr class="table_head">
               <th>Name</th>
               <th>Email</th>
               <th>Title</th>
@@ -25,15 +33,15 @@
             </tr>
           </thead>
           <tbody>
-            {% for person in result %}
+            {% for person in table %}
              <tr>
                 {% for value in person %}
-                  <td>{{ value }} </td>
+                  <td class="table_vals overflow-auto" contenteditable="true">{{ value }} </td>
                 {% endfor %}
              </tr>
             {% endfor %}
           </tbody>
-        </table>
+        {% endfor %}
       </div>
     </body>
 </html>

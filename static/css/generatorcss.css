@@ -1,11 +1,27 @@
 h1{
     font-family: 'Arimo', sans-serif;
     color:black;
-    font-size: 75x;
+    font-size: 50x;
     text-align:left;
 }
-
-thead{
+p{
+    text-align:right;
+}
+.table_head{
     background-color:blue;
     font-weight:bold;
+    color:white;
+}
+
+.table {
+  max-width: 50%;
+}
+
+table {
+  display: inline-block;
+  float: left;
+}
+
+body {
+  font-size: 12px;
 }

@@ -29,8 +29,8 @@ def generateList():
   else:
     [people_table, names, header_map] = read_jsoe_dir(create, check, prev, fileName)
     # TODO call checkBlink here if check
-    people_list = format_table(people_table, names, header_map)
-    return render_template('generator.html', result = people_list)
+    [people_list1, people_list2] = format_table(people_table, names, header_map)
+    return render_template('generator.html', result = [people_list1, people_list2])
 
 @app.route('/error/', methods=['GET', 'POST'])
 def optErrors():

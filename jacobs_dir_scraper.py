@@ -173,6 +173,18 @@ def split_location(loc):
       room = loc[last_idx - 1] + room
     last_idx = last_idx - 1 # to get rid of the trailing space
   building = loc[:last_idx]
+  if "Jacobs" in building:
+    building = "JH"
+  elif "Atkinson" in building:
+    building = "AH"
+  elif "Spiess" in building:
+    building = "SH"
+  elif "Ritter" in building:
+    building = "RH"
+  elif "Warren Lect" in building:
+    building = "WLH"
+  elif "SERF" in building:
+    building = "SERF"
   return [room, building] 
 
 def format_table(table, names, header_map):
@@ -180,7 +192,11 @@ def format_table(table, names, header_map):
   header_enum = create_header_enum(header_map)
   
 # TODO figure out how to use error checking bools too
-  people_list = list()
+  people_list1 = list()
+  people_list2 = list()
+  count = 0
+  total = len([name for name in names if name in table])
+
   for name in names:
     if name in table:
       person = list()
@@ -191,5 +207,9 @@ def format_table(table, names, header_map):
       [room, building] = split_location(table[name][header_enum['Location']][0])
       person.append(room)
       person.append(building)
-      people_list.append(person)
-  return people_list
+      if count < (total / 2):
+        people_list1.append(person)
+      else:
+        people_list2.append(person)
+      count += 1
+  return people_list1, people_list2
