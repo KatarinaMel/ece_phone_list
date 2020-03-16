@@ -7,41 +7,96 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <link rel = "stylesheet" href="{{ url_for('static', filename='css/generatorcss.css') }}" />
         <link href="https://fonts.googleapis.com/css?family=Arimo&display=swap" rel="stylesheet">
+        <link rel = "stylesheet" href="{{ url_for('static', filename='css/generatorcss.css') }}" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type=text/javascript>
+          $(function() {
+            $('a#save').bind('click', function() {
+              $.getJSON('/save_list',
+                        function(data) {});
+              return false;
+            });
+          });
+        </script>
+		<script type=text/javascript>
+			$(document).ready(function() {
+				$('.edit-btn').click(function() {
+					var currentTr = $(this).parents('tr').find('td');
+					if ($(this).text().trim() == 'Edit') {
+						currentTd = $(this).parents('tr').find($("td").not(":nth-child(1)"));
+						$.each(currentTd, function() {
+							$(this).prop('contenteditable', true);
+						});
+					}
+
+					else {
+						$.each(currentTd, function() {
+							$(this).prop('contenteditable', false);
+							console.log($(this).text().trim());
+							console.log($(this).parent('tr').get(0).id);
+							var idx = ($(this).parent('tr').get(0).id);
+						});
+					}
+
+					$(this).html($(this).html() == 'Edit' ? 'Update' : 'Edit');
+					if ($(this).html() == 'Update') {
+						$(this).prop('contenteditable', false);
+					}
+				});
+			});
+		</script>
+
     </head>
     <body>
-      <h1>Electrical and Computer Engineering</h1>
-      <p id="date"></p>
+      <h1>ELECTRICAL AND COMPUTER ENGINEERING</h1>
+      <h3 class="date" id="date"></h3>
       <script>
+        n = new Date();
         y = n.getFullYear();
         m = n.getMonth() + 1;
         d = n.getDate();
-        document.getElementById("date").innerHTML = m + "/" + d + "/" + y;
-      </script>
-      <div class="container-fluid overflow-auto">
+        document.getElementById("date").innerHTML = m + "." + d + "." + y;
+	  </script>
+      <div class="container row">
+        <form>
+          <a href=# id=save><button class="btn btn-outline-success header-btn">Save</button></a>
+        </form>
+        <button class="btn btn-outline-dark header-btn" onclick="$('button').remove(); $('.btn-col').remove(); print();">Ready to Print!</button>
+      </div>
+      <div class="container-fluid overflow-auto row">
       {% for table in result %}
         <table class="table table-striped w-auto table-bordered table-responsive">
           <thead>
             <tr class="table_head">
-              <th>Name</th>
-              <th>Email</th>
-              <th>Title</th>
-              <th>Phone</th>
-              <th>Room</th>
-              <th>Building</th>
+			  <th class="btn-col"></th>
+              <th>NAME</th>
+              <th>EMAIL</th>
+              <th>TITLE</th>
+              <th>PHONE</th>
+              <th>ROOM</th>
+              <th>BUILDING</th>
             </tr>
           </thead>
           <tbody>
             {% for person in table %}
-             <tr>
+             <tr class="person">
+				 <td class="btn-col">
+					<button type="button" class="btn btn-danger edit-btn">Edit</button>
+				 </td>
                 {% for value in person %}
-                  <td class="table_vals overflow-auto" contenteditable="true">{{ value }} </td>
+                  <td class="table_vals overflow-auto" contenteditable="false">{{ value }} </td>
                 {% endfor %}
              </tr>
             {% endfor %}
           </tbody>
         {% endfor %}
+		<script>
+			var cls = document.getElementsByClassName("person"); 
+			for (n=0, length = cls.length; n < length; n++) {
+				cls[n].id= n;
+			}
+		</script>
       </div>
     </body>
 </html>

@@ -6,6 +6,7 @@ from contextlib import closing
 from bs4 import BeautifulSoup
 from collections import defaultdict
 import re
+import json
 
 # Attempts to get the content at the specified url
 def simple_get(url):
@@ -173,19 +174,20 @@ def split_location(loc):
       room = loc[last_idx - 1] + room
     last_idx = last_idx - 1 # to get rid of the trailing space
   building = loc[:last_idx]
+  short_building = building
   if "Jacobs" in building:
-    building = "JH"
+    short_building = "JH"
   elif "Atkinson" in building:
-    building = "AH"
+    short_building = "AH"
   elif "Spiess" in building:
-    building = "SH"
+    short_building = "SH"
   elif "Ritter" in building:
-    building = "RH"
+    short_building = "RH"
   elif "Warren Lect" in building:
-    building = "WLH"
+    short_building = "WLH"
   elif "SERF" in building:
-    building = "SERF"
-  return [room, building] 
+    short_building = "SERF"
+  return [room, short_building] 
 
 def format_table(table, names, header_map):
 # Re-map headers to nums
@@ -200,7 +202,7 @@ def format_table(table, names, header_map):
   for name in names:
     if name in table:
       person = list()
-      person.append(name)
+      person.append(name.upper())
       person.append(table[name][header_enum['Email']][0])
       person.append(title_symbol(table[name][header_enum['Title']][0]))
       person.append(shorten_phone(table[name][header_enum['Phone']][0]))
@@ -212,4 +214,30 @@ def format_table(table, names, header_map):
       else:
         people_list2.append(person)
       count += 1
+  return people_list1, people_list2
+
+def load_json(fileName):
+  # read file
+  with open(fileName, 'r') as file:
+    data = file.read()
+
+  # Parse as json into a dict
+  table = json.loads(data)
+
+  # Separate into two tables
+  header_map = ["Name", "Email", "Title", "Phone", "Room", "Building"]
+  total = len(table)
+  count = 0
+  people_list1 = list()
+  people_list2 = list()
+
+  for person in table:
+    person_list = list()
+    for category in header_map:
+      person_list.append(person[category])
+    if count < (total / 2):
+      people_list1.append(person_list)
+    else:
+      people_list2.append(person_list)
+    count += 1
   return people_list1, people_list2

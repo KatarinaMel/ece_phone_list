@@ -7,13 +7,20 @@
     </head>
     <body>
         <h1>Errors Occurred!</h1>
-        <p id="errorMsg"></p>
+        <p id="msg">hi</p>
         <script>
-          function getErrorMsg(code) {
-            return "hi";
+        var errorCode = parseInt({{ code }});
+          if (errorCode == 0) {
+            document.getElementById("msg").innerHTML = "No options were chosen. Go back and pick at least one option.";
           }
-          document.getElementById("errorMsg").innerHtml = getErrorMsg(5);
 
+          else if (errorCode == 1) {
+            document.getElementById("msg").innerHTML = "Option to upload an existing file was chosen, but no file was provided. Go back and provide the file name.";
+          }
+
+          else {
+            document.getElementById("msg").innerHTML = "?";
+          }
         </script>
     </body>
 </html>

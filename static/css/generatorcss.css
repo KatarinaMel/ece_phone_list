@@ -1,20 +1,27 @@
 h1{
     font-family: 'Arimo', sans-serif;
-    color:black;
-    font-size: 50x;
-    text-align:left;
+    color: black;
+    font-size: 20pt;
+    text-align: left;
+    font-weight: bold;
+    display: inline-block;
 }
-p{
+h3 {
+    font-family: 'Arimo', sans-serif;
+    color:black;
     text-align:right;
+    font-size: 11pt;
+    float: right;
+    display: inline-block
 }
 .table_head{
-    background-color:blue;
+    background-color: #5b92c9;
     font-weight:bold;
     color:white;
 }
 
 .table {
-  max-width: 50%;
+  width: 50%;
 }
 
 table {
@@ -23,5 +30,15 @@ table {
 }
 
 body {
-  font-size: 12px;
+  font-family: 'Arimo', 'sans-serif';
+  font-size: 11pt;
+}
+
+.container-fluid {
+  float: center;
+}
+
+.header-btn {
+  display: inline-block;
+  float: left;
 }
